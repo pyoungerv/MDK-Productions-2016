@@ -9,14 +9,14 @@ body {
 
 #video-background {
 /*  making the video fullscreen  */
-  position: fixed;
+  position: absolute;
   right: 0; 
   bottom: 0;
   min-width: 100%; 
   min-height: 100%;
   width: auto; 
   height: auto;
-  z-index: -100;
+  z-index: 0;
 }
 
 article {
@@ -40,3 +40,37 @@ h1 {
   font-family: Oswald, sans-serif;
   text-align: center;
 }
+
+
+
+/*named items*/
+body{
+  overflow: hidden;
+}
+
+#nav-button {
+  position: absolute;
+  bottom: 36px;
+  right: 36px;
+}
+
+#video{
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/*how to resize an icon button*/
+.md-button.button-48 {
+  line-height: 48px;
+  width: 64px;
+  height: 64px; }
+
+.md-button.button-48 md-icon {
+  line-height: 48px;
+  width: 48px;
+  height: 48px; }
+
+
+/*.s36 {
+  width: 36px;
+  height: 36px; }*/

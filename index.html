@@ -7,25 +7,70 @@
         <!-- Angular Material CSS now available via Google CDN; version 0.9.4 used here -->
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
 
+        <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    
         <link rel="stylesheet" href="css/style.css">
     
   </head>
 
-  <body>
+  <body ng-app="app" ng-cloak>
 
-    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 
-<article>
-  <!--  Content  -->
-  <h1>GROSS DESIGN co.</h1>
-</article>
+<div ng-controller="AppCtrl" layout="column" style="height:100%;">
+  <section layout="row" flex>
+
+    <div  layout="column" flex style="justify-content:center">
+
+      <!--  Video is muted & autoplays, placed after major DOM elements for performance & has an image fallback  -->
+      <video id="video" autoplay loop muted>
+          <source src="https://09-lvl3-pdl.vimeocdn.com/01/1652/0/8262920/13197469.mp4?expires=1458232694&token=0a0e98c0f0c3b3af466bd" type="video/mp4">
+      </video>
+      
+      <md-button ng-click="toggleRight()"
+        id="nav-button"
+        class="md-icon-button md-primary button-48" aria-label="Settings">
+        <md-icon md-svg-icon="img/icons/ic_menu_white_36px.svg" class=""></md-icon>
+      </md-button>
+        
+    </div>
+    
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+      <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">Sidenav Right</h1>
+      </md-toolbar>
+      <md-content ng-controller="RightCtrl" layout-padding>
+        <form>
+          <md-input-container>
+            <label for="testInput">Test input</label>
+            <input type="text" id="testInput"
+                   ng-model="data" md-autofocus>
+          </md-input-container>
+        </form>
+        <md-button ng-click="close()" class="md-primary">
+          Close Sidenav Right
+        </md-button>
+      </md-content>
+    </md-sidenav>
+    
+  </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
   
-<!--  Video is muted & autoplays, placed after major DOM elements for performance & has an image fallback  -->
-<video autoplay loop id="video-background" muted>
-  <!--<source src="http://beta.mattgrossdesign.com/sites/default/files/wood%20autumn-HD.mp4" type="video/mp4">-->
-    <source src="https://13-lvl3-pdl.vimeocdn.com/01/4627/3/98136300/262256207.mp4?expires=1457563318&token=0912dbcdbd192de049f9b" type="video/mp4">
-</video>
-  
+    <!--<article>
+      <h1>GROSS DESIGN co.</h1>
+    </article>-->
+    
+    
 
     <!-- Angular Material Dependencies -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script> 
@@ -34,6 +79,78 @@
     
     <!-- Angular Material Javascript now available via Google CDN; version 0.9.4 used here -->
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script> 
+    
+      <!-- Your application bootstrap  -->
+    <script type="text/javascript">    
+      var app = angular.module('app', ['ngMaterial']);
+      
+      
+      
+      app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+    $scope.toggleLeft = buildDelayedToggler('left');
+    $scope.toggleRight = buildToggler('right');
+    $scope.isOpenRight = function(){
+      return $mdSidenav('right').isOpen();
+    };
+    /**
+     * Supplies a function that will continue to operate until the
+     * time is up.
+     */
+    function debounce(func, wait, context) {
+      var timer;
+      return function debounced() {
+        var context = $scope,
+            args = Array.prototype.slice.call(arguments);
+        $timeout.cancel(timer);
+        timer = $timeout(function() {
+          timer = undefined;
+          func.apply(context, args);
+        }, wait || 10);
+      };
+    }
+    /**
+     * Build handler to open/close a SideNav; when animation finishes
+     * report completion in console
+     */
+    function buildDelayedToggler(navID) {
+      return debounce(function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }, 200);
+    }
+    function buildToggler(navID) {
+      return function() {
+        $mdSidenav(navID)
+          .toggle()
+          .then(function () {
+            $log.debug("toggle " + navID + " is done");
+          });
+      }
+    }
+  })
+  .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+    $scope.close = function () {
+      $mdSidenav('left').close()
+        .then(function () {
+          $log.debug("close LEFT is done");
+        });
+    };
+  })
+  .controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+    $scope.close = function () {
+      $mdSidenav('right').close()
+        .then(function () {
+          $log.debug("close RIGHT is done");
+        });
+    };
+  }); 
+      
+      
+      
+    </script>
     
   </body>
 </html>
